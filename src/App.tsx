@@ -33,7 +33,7 @@ function App() {
   }, [indexMusic, musicList, shouldAutoplay]);
 
   return (
-    <div className="App flex flex-col justify-center items-center h-screen bg-center bg-cover"
+    <div className="App flex flex-col justify-center items-center   h-screen bg-center bg-cover overflow-hidden"
     style={{backgroundImage : backgroundImg }}>
       
       <Header />
