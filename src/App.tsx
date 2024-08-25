@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Footer from "./components/Footer";
+import Header from "./components/Header";  
+import React, { useRef} from 'react';
 
-function App() {
+function App() {  
+  const backgroundImg:string = 'url("/img/background.png")';
+  
+  const audioRef = useRef<HTMLAudioElement | null>(null); 
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App flex flex-col justify-center items-center h-screen bg-center bg-cover"
+    style={{backgroundImage : backgroundImg }}>
+      
+      <Header />
+      <div className="music-player ">
+        <audio ref={audioRef} src="/songs/Warriors.mp3"/>
+      </div>
+      <Footer audioRef={audioRef} />
+
     </div>
   );
 }

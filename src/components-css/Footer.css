@@ -1,0 +1,24 @@
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    height: 16px; /* Altura do thumb */
+    width: 16px;  /* Largura do thumb */
+    background-color: #EB4848; /* Cor do thumb */
+    border-radius: 50%; /* Arredondar o thumb */
+    cursor: pointer; /* Cursor quando o mouse está sobre o thumb */
+}
+
+input[type="range"]::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    background-color: #EB4848;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type="range"]::-ms-thumb {
+    height: 16px;
+    width: 16px;
+    background-color: #EB4848;
+    border-radius: 50%;
+    cursor: pointer;
+}
