@@ -1,12 +1,22 @@
 import TimeMusic from "./TimeMusic";
-import React, {useState } from 'react';
+import React, {Dispatch, SetStateAction, useState } from 'react';
 import "../components-css/Footer.css";
 
-type FooterProps = {
-    audioRef: React.RefObject<HTMLAudioElement>; // Recebe uma referência ao elemento de áudio
-  };
+interface Music {
+    title: string;
+    artist: string;
+    filePath: string;
+  }
 
-const Footer: React.FC<FooterProps> = ({ audioRef }) => {
+type FooterProps = {
+    audioRef: React.RefObject<HTMLAudioElement>;
+    setIndexMusic: Dispatch<SetStateAction<number>>;
+    indexMusic: number;
+    musicList: Music[];
+    setShouldAutoplay: Dispatch<SetStateAction<boolean>>;
+};
+
+const Footer: React.FC<FooterProps> = ({audioRef, setIndexMusic, indexMusic, musicList, setShouldAutoplay}) => {
 
     const [isPlaying, setIsPlaying] = useState<boolean>(false); 
     const [volume, setVolume] = useState<number>(0.5); 
@@ -23,6 +33,30 @@ const Footer: React.FC<FooterProps> = ({ audioRef }) => {
           setIsPlaying(!isPlaying); // Alterna o estado entre tocar e pausar
         }
     };
+
+    const hadleNextPrev = (param: string) => {
+    setShouldAutoplay(true);
+      if (param === "next") {
+        const maxIndexMusic = musicList.length;
+        if (indexMusic === maxIndexMusic - 1) {
+          setIndexMusic(0);
+          setIsPlaying(true);
+        } else {
+          setIndexMusic(indexMusic + 1);
+          setIsPlaying(true);
+        }
+      } else {
+        if (indexMusic === 0) {
+          const maxIndexMusic = musicList.length;
+          setIndexMusic(maxIndexMusic - 1);
+          setIsPlaying(true);
+        } else {
+          setIndexMusic(indexMusic - 1);
+          setIsPlaying(true);
+        }
+      }
+    };
+
     const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newVolume = parseFloat(e.target.value);
         setVolume(newVolume);
@@ -53,11 +87,42 @@ const Footer: React.FC<FooterProps> = ({ audioRef }) => {
             <TimeMusic />
             <main className="bg-dark-10/90 md:h-24 h-32 w-screen flex md:flex-row flex-col justify-around md:items-center text-lg">
 
-                <div className="Infos flex justify-start pl-10 md:pl-0 md:justify-center gap-2 items-center text-white w-80 ">
+                <div className="Infos flex justify-between px-10 md:pl-0 md:justify-center gap-2 items-center text-white md:w-80 w-screen ">
                     <img src="/img/button-favorite.svg" alt="" className="hidden md:flex"/>
                     <div className="flex-row items-start md:items-center">
-                        <h2 className="font-bold text-xl">Warriors</h2>
-                        <p>IMAGINE DRAGONS</p>
+                        <h2 className="font-bold text-2xl">{musicList[indexMusic].title}</h2>
+                        <p className="text-sm">{musicList[indexMusic].artist.toUpperCase()}</p>
+                    </div>
+                    <div className="flex items-center gap-1 group md:hidden">
+                        <button onClick={handleMutedToggle} className="hover:scale-110">
+                        {!isMuted && volume > 0.01 ? (
+                            <svg className="hover:scale-110" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.6665 14.6667L15.9998 20.0001H10.6665V28.0001H15.9998L22.6665 33.3334V14.6667Z" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M28.7202 19.2799C29.97 20.5301 30.6721 22.2255 30.6721 23.9932C30.6721 25.761 29.97 27.4564 28.7202 28.7066M33.4269 14.5732C35.5002 17.4999 37.3307 20.4644 37.3307 23.9999C37.3307 27.5354 35.5002 30.4999 33.4269 33.4266C33.4269 33.4266 37.5002 28.0102 37.5002 23.9999C37.5002 19.9896 33.4269 14.5732 33.4269 14.5732Z" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        ) : (
+                            <svg className="hover:scale-110" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 22.6665 14.6667 L 15.9998 20.0001 H 10.6665 V 28.0001 H 15.9998 L 22.6665 33.3334 V 14.6667 Z Z M 26 27 L 26 27 L 28 29 L 31 26 L 34 29 L 36 27 L 33 24 L 36 21 L 34 19 L 31 22 L 28 19 L 26 21 L 29 24 L 26 27 L 26 27 M 28 27 L 31 24 L 34 27 L 31 24 L 34 21 L 31 24 L 28 21 L 31 24 L 28 27 L 28 27" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        )}
+
+                        </button>
+                        <input  
+                            className="h-4 
+                            appearance-none
+                            bg-gray-10 
+                            rounded-lg
+                            focus:outline-none
+                            group-hover:flex 
+                            hover:cursor-pointer
+                            hover:bg-gray-10/80
+                            z-50
+                            hidden"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            value={volume}
+                            onChange={handleVolumeChange}
+                        />
                     </div>
                 </div>
 
@@ -68,11 +133,18 @@ const Footer: React.FC<FooterProps> = ({ audioRef }) => {
                     <path d="M17.8333 38.6667L12.5 33.3333L17.8333 28" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M36.5 25.3333V27.9999C36.5 29.4144 35.9381 30.771 34.9379 31.7712C33.9377 32.7713 32.5812 33.3333 31.1667 33.3333H12.5" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <svg width="49" height="48" viewBox="0 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M28.5 32L20.5 24L28.5 16" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
 
-                    {/*Song Player*/}
+                    {/* Prev Button */}
+                    <button 
+                    className="hover:scale-110"
+                    onClick={ () => hadleNextPrev('prev')}
+                    >
+                        <svg width="49" height="48" viewBox="0 0 49 48" fill="none">
+                        <path d="M28.5 32L20.5 24L28.5 16" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+
+                    {/*Play Button*/}
                     <button onClick={handlePlayPause} className="transition duration-300 ease-in-out transform hover:scale-110">
                         {isPlaying ? (
                         <svg
@@ -113,11 +185,16 @@ const Footer: React.FC<FooterProps> = ({ audioRef }) => {
                         )}
                     </button>
 
+                    {/* Next Button */}
+                    <button 
+                    className="hover:scale-110"
+                    onClick={ () => hadleNextPrev('next')}>
+                        <svg width="49" height="48" viewBox="0 0 49 48" fill="none">
+                        <path d="M20.5 32L28.5 24L20.5 16" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
 
-                    <svg width="49" height="48" viewBox="0 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20.5 32L28.5 24L20.5 16" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <svg width="49" height="48" viewBox="0 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="49" height="48" viewBox="0 0 49 48" fill="none">
                     <g clip-path="url(#clip0_299593_4708)">
                     <path d="M39.1667 13.3333V21.3333H31.1667" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M35.82 28.0001C34.9533 30.4533 33.3127 32.5584 31.1455 33.9981C28.9784 35.4378 26.4019 36.1342 23.8046 35.9822C21.2072 35.8303 18.7295 34.8383 16.745 33.1557C14.7605 31.4731 13.3766 29.1911 12.8018 26.6535C12.2271 24.116 12.4926 21.4603 13.5585 19.0869C14.6243 16.7134 16.4327 14.7506 18.7111 13.4943C20.9896 12.238 23.6146 11.7562 26.1906 12.1216C28.7667 12.487 31.1542 13.6798 32.9933 15.5201L39.1667 21.3334" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -132,8 +209,8 @@ const Footer: React.FC<FooterProps> = ({ audioRef }) => {
 
                 <div className="md:flex justify-center lg:gap-10 gap-4 items-center  w-80 hidden">
                     <div className="flex items-center gap-1 group">
-                        <button onClick={handleMutedToggle} className="transition duration-300 ease-in-out transform hover:scale-110">
-                        {!isMuted && volume > 0.05 ? (
+                        <button onClick={handleMutedToggle} className="hover:scale-110">
+                        {!isMuted && volume > 0.01 ? (
                             <svg className="hover:scale-110" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M22.6665 14.6667L15.9998 20.0001H10.6665V28.0001H15.9998L22.6665 33.3334V14.6667Z" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M28.7202 19.2799C29.97 20.5301 30.6721 22.2255 30.6721 23.9932C30.6721 25.761 29.97 27.4564 28.7202 28.7066M33.4269 14.5732C35.5002 17.4999 37.3307 20.4644 37.3307 23.9999C37.3307 27.5354 35.5002 30.4999 33.4269 33.4266C33.4269 33.4266 37.5002 28.0102 37.5002 23.9999C37.5002 19.9896 33.4269 14.5732 33.4269 14.5732Z" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -150,6 +227,8 @@ const Footer: React.FC<FooterProps> = ({ audioRef }) => {
                             rounded-lg
                             focus:outline-none
                             group-hover:flex 
+                            hover:cursor-pointer
+                            hover:bg-gray-10/80
                             lg:flex
                             z-50
                             hidden"
