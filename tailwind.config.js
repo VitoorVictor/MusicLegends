@@ -10,6 +10,9 @@ module.exports = {
         'brand-color': '#EB4848',
         'gray-10' : '#929292',
       },
+      height:{
+        'screen-93': '93vh',
+      },
     },
   },
   plugins: [],
