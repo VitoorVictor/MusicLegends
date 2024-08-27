@@ -83,14 +83,14 @@ const Footer: React.FC<FooterProps> = ({audioRef, setIndexMusic, indexMusic, mus
     }
 
     return(
-        <footer className="flex flex-col absolute bottom-0">
-            <TimeMusic />
-            <main className="bg-dark-10/90 md:h-24 h-32 w-screen flex md:flex-row flex-col justify-around md:items-center text-lg">
+        <footer className="flex flex-col ">
+            <TimeMusic audioRef={audioRef}/>
+            <main className="bg-dark-10/90 md:h-24 h-36 md:pb-0 md:pt-0 pt-2 pb-4 w-screen flex md:flex-row flex-col justify-around md:items-center text-lg">
 
-                <div className="Infos flex justify-between px-10 md:pl-0 md:justify-center gap-2 items-center text-white md:w-80 w-screen ">
+                <div className="Infos flex justify-between px-10 md:px-0 md:justify-center gap-2 items-center text-white md:w-80 w-screen h-full ">
                     <img src="/img/button-favorite.svg" alt="" className="hidden md:flex"/>
-                    <div className="flex-row items-start md:items-center">
-                        <h2 className="font-bold text-2xl">{musicList[indexMusic].title}</h2>
+                    <div className="flex-row items-start md:items-center h-auto">
+                        <h2 className="font-bold text-xl lg:text-2xl">{musicList[indexMusic].title}</h2>
                         <p className="text-sm">{musicList[indexMusic].artist.toUpperCase()}</p>
                     </div>
                     <div className="flex items-center gap-1 group md:hidden">

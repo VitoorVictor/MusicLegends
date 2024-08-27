@@ -33,11 +33,13 @@ function App() {
   }, [indexMusic, musicList, shouldAutoplay]);
 
   return (
-    <div className="App flex flex-col sm:h-screen h-screen-93 justify-between bg-cover bg-no-repeat" 
+    <div className="App flex flex-col h-screen justify-between bg-cover bg-no-repeat" 
     style={{backgroundImage : backgroundImg}}
     >
       <Header />
-      <audio ref={audioRef} src={musicList[indexMusic].filePath}/>
+      <div className="flex-1">
+        <audio ref={audioRef} src={musicList[indexMusic].filePath}/>  
+      </div>
       <Footer audioRef={audioRef} setIndexMusic={setIndexMusic} indexMusic={indexMusic} musicList={musicList} setShouldAutoplay={setShouldAutoplay}/>
     </div>
     
