@@ -15,6 +15,7 @@ const TimeMusic: React.FC<TimeMusicProps> = ({ audioRef }) => {
 
   const formatZero = (n: number) => (n < 10 ? '0' + n : n);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateTime = () => {
     if (audioRef.current) {
       const currentMinutes: number = Math.floor(audioRef.current.currentTime / 60);
@@ -34,18 +35,19 @@ const TimeMusic: React.FC<TimeMusicProps> = ({ audioRef }) => {
   };
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.addEventListener('timeupdate', updateTime);
-      audioRef.current.addEventListener('loadedmetadata', updateTime);
+    const currentAudio = audioRef.current;
+    if (currentAudio) {
+      currentAudio.addEventListener('timeupdate', updateTime);
+      currentAudio.addEventListener('loadedmetadata', updateTime);
     }
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.removeEventListener('timeupdate', updateTime);
-        audioRef.current.removeEventListener('loadedmetadata', updateTime);
+      if (currentAudio) {
+        currentAudio.removeEventListener('timeupdate', updateTime);
+        currentAudio.removeEventListener('loadedmetadata', updateTime);
       }
     };
-  }, [audioRef]);
+  }, [audioRef, isDragging, updateTime]);
 
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (audioRef.current && progressRef.current) {
@@ -66,6 +68,7 @@ const TimeMusic: React.FC<TimeMusicProps> = ({ audioRef }) => {
     setIsDragging(false);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging && audioRef.current && progressRef.current) {
       const rect = progressRef.current.getBoundingClientRect();
@@ -77,6 +80,7 @@ const TimeMusic: React.FC<TimeMusicProps> = ({ audioRef }) => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleTouchMove = (e: TouchEvent) => {
     if (isDragging && audioRef.current && progressRef.current) {
       const rect = progressRef.current.getBoundingClientRect();
@@ -108,7 +112,7 @@ const TimeMusic: React.FC<TimeMusicProps> = ({ audioRef }) => {
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, handleMouseMove, handleTouchMove]);
 
   return (
     <div className="flex-row items-end md:translate-y-6">

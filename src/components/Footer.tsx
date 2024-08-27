@@ -126,7 +126,7 @@ const Footer: React.FC<FooterProps> = ({audioRef, setIndexMusic, indexMusic, mus
                     </div>
                 </div>
 
-                <div className="commands flex justify-center lg:gap-10 md:gap-4 gap-6 items-center w-auto px-4">
+                <div className="commands flex justify-center lg:gap-10 md:gap-4 gap-6 items-center w-auto px-4 h-full">
                     <svg width="49" height="48" viewBox="0 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M31.1667 9.33325L36.5001 14.6666L31.1667 19.9999" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M12.5 22.6667V20.0001C12.5 18.5856 13.0619 17.229 14.0621 16.2288C15.0623 15.2287 16.4188 14.6667 17.8333 14.6667H36.5" stroke="#929292" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -207,7 +207,7 @@ const Footer: React.FC<FooterProps> = ({audioRef, setIndexMusic, indexMusic, mus
                     </svg>
                 </div>
 
-                <div className="md:flex justify-center lg:gap-10 gap-4 items-center  w-80 hidden">
+                <div className="md:flex justify-center lg:gap-10 gap-4 items-center  w-80 hidden h-full">
                     <div className="flex items-center gap-1 group">
                         <button onClick={handleMutedToggle} className="hover:scale-110">
                         {!isMuted && volume > 0.01 ? (
