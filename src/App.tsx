@@ -7,7 +7,7 @@ function App() {
   const backgroundImg:string = 'url("/img/background.png")';
 
   return (
-    <div className="App flex flex-col h-screen justify-between bg-cover bg-no-repeat" 
+    <div className="App flex flex-col h-screen justify-between bg-cover bg-center bg-no-repeat" 
     style={{backgroundImage : backgroundImg}}
     >
       <Header />
